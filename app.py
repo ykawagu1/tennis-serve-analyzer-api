@@ -1,6 +1,14 @@
+import os
 from flask import Flask, request, jsonify
 
 app = Flask(__name__)
+
+# 保存フォルダを永続ディスクに
+UPLOAD_FOLDER = '/var/data/uploads'
+OUTPUT_FOLDER = '/var/data/output'
+
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+os.makedirs(OUTPUT_FOLDER, exist_ok=True)
 
 @app.route("/health")
 def health():
