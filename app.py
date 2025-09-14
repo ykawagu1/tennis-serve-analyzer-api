@@ -37,3 +37,11 @@ def list_output():
                 "path": os.path.relpath(path, OUTPUT_FOLDER)
             })
     return jsonify({"files": files})
+
+    @app.route("/api/list_uploads", methods=["GET"])
+def list_uploads():
+    try:
+        files = os.listdir(UPLOAD_FOLDER)
+        return jsonify({"files": files})
+    except Exception as e:
+        return jsonify({"error": str(e)})
