@@ -19,11 +19,17 @@ def analyze():
     f = request.files.get("video")
     if not f:
         return jsonify({"success": False, "error": "動画ファイルがありません"}), 400
+    
+    save_path = os.path.join(UPLOAD_FOLDER, f.filename)
+    f.save(save_path)
+
     return jsonify({
         "success": True,
-        "message": f"動画 {f.filename} を受け取りました（ダミー解析）",
+        "message": f"動画 {f.filename} を受け取り、 {save_path} に保存しました（ダミー解析）",
         "result": {"score": 50, "advice": "次は本番の解析を追加しましょう"}
+    })advice": "次は本番の解析を追加しましょう"}
     })
+    
 @app.route("/api/list_output", methods=["GET"])
 def list_output():
     files = []
