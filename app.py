@@ -6,7 +6,7 @@ app = Flask(__name__)
 # 保存フォルダを永続ディスクに
 UPLOAD_FOLDER = '/var/data/uploads'
 OUTPUT_FOLDER = '/var/data/output'
-EXPIRE_SECONDS = 24 * 60 * 60  # 24時間（テスト時は60に下げてもOK）
+EXPIRE_SECONDS = 60  #（テスト用で60に下げている）
 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(OUTPUT_FOLDER, exist_ok=True)
@@ -62,7 +62,9 @@ def cleanup_endpoint():
             for name in files:
                 path = os.path.join(root, name)
                 try:
-                    if now - os.path.getmtime(path) > EXPIRE_SECONDS:
+                    diff = now - os.path.getmtime(path)
+                    print(f"DEBUG: {path}, now={now}, mtime={os.path.getmtime(path)}, diff={diff}")
+                    if diff > EXPIRE_SECONDS:
                         os.remove(path)
                         deleted.append(path)
                 except Exception as e:
@@ -75,5 +77,4 @@ def cleanup_endpoint():
                         deleted.append(path)
                 except Exception as e:
                     deleted.append(f"削除エラー {path}: {e}")
-
     return jsonify({"deleted": deleted})

@@ -3,7 +3,7 @@ import os, time, shutil
 
 UPLOAD_FOLDER = '/var/data/uploads'
 OUTPUT_FOLDER = '/var/data/output'
-EXPIRE_SECONDS = 60  # 1分
+EXPIRE_SECONDS = 24*60*60  # 1日
 
 def cleanup(folder):
     now = time.time()
