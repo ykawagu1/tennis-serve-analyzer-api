@@ -27,9 +27,8 @@ def analyze():
         "success": True,
         "message": f"動画 {f.filename} を受け取り、 {save_path} に保存しました（ダミー解析）",
         "result": {"score": 50, "advice": "次は本番の解析を追加しましょう"}
-    })advice": "次は本番の解析を追加しましょう"}
     })
-    
+
 @app.route("/api/list_output", methods=["GET"])
 def list_output():
     files = []
