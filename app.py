@@ -1,4 +1,4 @@
-import os
+import os, time, shutil
 from flask import Flask, request, jsonify
 
 app = Flask(__name__)
@@ -6,6 +6,7 @@ app = Flask(__name__)
 # 保存フォルダを永続ディスクに
 UPLOAD_FOLDER = '/var/data/uploads'
 OUTPUT_FOLDER = '/var/data/output'
+EXPIRE_SECONDS = 24 * 60 * 60  # 24時間（テスト時は60に下げてもOK）
 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(OUTPUT_FOLDER, exist_ok=True)
@@ -50,3 +51,29 @@ def list_uploads():
         return jsonify({"files": files})
     except Exception as e:
         return jsonify({"error": str(e)})
+
+@app.route("/api/cleanup", methods=["POST"])
+def cleanup_endpoint():
+    now = time.time()
+    deleted = []
+
+    for folder in [UPLOAD_FOLDER, OUTPUT_FOLDER]:
+        for root, dirs, files in os.walk(folder, topdown=False):
+            for name in files:
+                path = os.path.join(root, name)
+                try:
+                    if now - os.path.getmtime(path) > EXPIRE_SECONDS:
+                        os.remove(path)
+                        deleted.append(path)
+                except Exception as e:
+                    deleted.append(f"削除エラー {path}: {e}")
+            for name in dirs:
+                path = os.path.join(root, name)
+                try:
+                    if now - os.path.getmtime(path) > EXPIRE_SECONDS:
+                        shutil.rmtree(path)
+                        deleted.append(path)
+                except Exception as e:
+                    deleted.append(f"削除エラー {path}: {e}")
+
+    return jsonify({"deleted": deleted})
