@@ -19,7 +19,7 @@ def cleanup(folder):
         for name in dirs:
             path = os.path.join(root, name)
             try:
-                if os.path.getmtime(path) < now - EXPIRE_SECONDS:
+                if os.path.getctime(path) < now - EXPIRE_SECONDS:
                     shutil.rmtree(path)
                     print(f"削除: {path}")
             except Exception as e:
