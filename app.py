@@ -6,7 +6,7 @@ app = Flask(__name__)
 # 保存フォルダを永続ディスクに
 UPLOAD_FOLDER = '/var/data/uploads'
 OUTPUT_FOLDER = '/var/data/output'
-EXPIRE_SECONDS = 60  #（テスト用で60に下げている）
+EXPIRE_SECONDS = 24*60*60  #（本番用24時間後に消去）
 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(OUTPUT_FOLDER, exist_ok=True)
