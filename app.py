@@ -24,3 +24,16 @@ def analyze():
         "message": f"動画 {f.filename} を受け取りました（ダミー解析）",
         "result": {"score": 50, "advice": "次は本番の解析を追加しましょう"}
     })
+@app.route("/api/list_output", methods=["GET"])
+def list_output():
+    files = []
+    for root, dirs, filenames in os.walk(OUTPUT_FOLDER):
+        for name in filenames:
+            path = os.path.join(root, name)
+            size = os.path.getsize(path)
+            files.append({
+                "name": name,
+                "size": size,
+                "path": os.path.relpath(path, OUTPUT_FOLDER)
+            })
+    return jsonify({"files": files})
