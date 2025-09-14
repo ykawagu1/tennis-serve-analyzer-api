@@ -38,7 +38,7 @@ def list_output():
             })
     return jsonify({"files": files})
 
-    @app.route("/api/list_uploads", methods=["GET"])
+@app.route("/api/list_uploads", methods=["GET"])
 def list_uploads():
     try:
         files = os.listdir(UPLOAD_FOLDER)
