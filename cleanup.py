@@ -3,7 +3,7 @@ import os, time, shutil
 
 UPLOAD_FOLDER = '/var/data/uploads'
 OUTPUT_FOLDER = '/var/data/output'
-EXPIRE_SECONDS = 0.05 * 60 * 60  # 24時間
+EXPIRE_SECONDS = 60  # 1分
 
 def cleanup(folder):
     now = time.time()
@@ -11,7 +11,7 @@ def cleanup(folder):
         for name in files:
             path = os.path.join(root, name)
             try:
-                if os.path.getmtime(path) < now - EXPIRE_SECONDS:
+                if os.path.getctime(path) < now - EXPIRE_SECONDS:
                     os.remove(path)
                     print(f"削除: {path}")
             except Exception as e:
